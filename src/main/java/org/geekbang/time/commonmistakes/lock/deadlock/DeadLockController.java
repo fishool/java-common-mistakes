@@ -27,6 +27,7 @@ public class DeadLockController {
     private ConcurrentHashMap<String, Item> items = new ConcurrentHashMap<>();
 
     public DeadLockController() {
+        // for (int i = startInclusive; i < endInclusive ; i++) { ... }
         IntStream.range(0, 10).forEach(i -> items.put("item" + i, new Item("item" + i)));
     }
 
@@ -53,6 +54,7 @@ public class DeadLockController {
     }
 
     private List<Item> createCart() {
+        // for (int i = startInclusive; i <= endInclusive ; i++) { ... }
         return IntStream.rangeClosed(1, 3)
                 .mapToObj(i -> "item" + ThreadLocalRandom.current().nextInt(items.size()))
                 .map(name -> items.get(name)).collect(Collectors.toList());
