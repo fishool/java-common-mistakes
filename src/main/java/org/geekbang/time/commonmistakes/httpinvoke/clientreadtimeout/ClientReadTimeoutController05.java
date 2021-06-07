@@ -13,8 +13,9 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("clientreadtimeout")
 @Slf4j
-public class ClientReadTimeoutController {
+public class ClientReadTimeoutController05 {
 
+    // 读取超时 ,服务端执行并不会中断
     private String getResponse(String url, int connectTimeout, int readTimeout) throws IOException {
         return Request.Get("http://localhost:45678/clientreadtimeout" + url)
                 .connectTimeout(connectTimeout)
