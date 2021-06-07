@@ -90,7 +90,7 @@ public class ConcurrentHashMapPerformanceController {
     private Map<String, Long> gooduse() throws InterruptedException {
         ConcurrentHashMap<String, LongAdder> freqs = new ConcurrentHashMap<>(ITEM_COUNT);
         ForkJoinPool forkJoinPool = new ForkJoinPool(THREAD_COUNT);
-        // parallelStream默认使用了fork-join框架，其默认线程数是CPU核心数。
+        // parallelStream默认使用了共享的ForkJoinPool，其默认线程数是CPU核心数-1。
         // 或者显示初始化 forkJoinPool , 指定线程数
         forkJoinPool.execute(() -> IntStream.rangeClosed(1, LOOP_COUNT).parallel().forEach(i -> {
                     String key = "item" + ThreadLocalRandom.current().nextInt(ITEM_COUNT);
