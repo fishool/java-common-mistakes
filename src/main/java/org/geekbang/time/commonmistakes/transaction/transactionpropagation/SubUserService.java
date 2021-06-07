@@ -21,6 +21,7 @@ public class SubUserService {
         throw new RuntimeException("invalid status");
     }
 
+    // 挂起一个新的事务 , 防止影响主事务
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void createSubUserWithExceptionRight(UserEntity entity) {
         log.info("createSubUserWithExceptionRight start");
