@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 @RestController
 @RequestMapping("lockgranularity")
 @Slf4j
-public class LockGranularityController {
+public class LockGranularityController02 {
 
     private List<Integer> data = new ArrayList<>();
 

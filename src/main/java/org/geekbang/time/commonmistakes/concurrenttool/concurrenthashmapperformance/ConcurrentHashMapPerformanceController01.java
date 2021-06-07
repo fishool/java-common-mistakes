@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 @RestController
 @RequestMapping("concurrenthashmapperformance")
 @Slf4j
-public class ConcurrentHashMapPerformanceController {
+public class ConcurrentHashMapPerformanceController01 {
 
     private static int LOOP_COUNT = 10000000;
     private static int THREAD_COUNT = 10;

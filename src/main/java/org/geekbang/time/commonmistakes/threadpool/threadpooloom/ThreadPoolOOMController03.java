@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 @RestController
 @RequestMapping("threadpooloom")
 @Slf4j
-public class ThreadPoolOOMController {
+public class ThreadPoolOOMController03 {
 
     private void printStats(ThreadPoolExecutor threadPool) {
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {

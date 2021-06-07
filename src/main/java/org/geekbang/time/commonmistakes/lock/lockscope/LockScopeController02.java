@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 @RestController
 @RequestMapping("lockscope")
 @Slf4j
-public class LockScopeController {
+public class LockScopeController02 {
 
     @GetMapping("wrong")
     public int wrong(@RequestParam(value = "count", defaultValue = "1000000") int count) {

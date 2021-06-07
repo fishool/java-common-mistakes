@@ -22,11 +22,11 @@ import java.util.stream.IntStream;
 @RestController
 @RequestMapping("deadlock")
 @Slf4j
-public class DeadLockController {
+public class DeadLockController02 {
 
     private ConcurrentHashMap<String, Item> items = new ConcurrentHashMap<>();
 
-    public DeadLockController() {
+    public DeadLockController02() {
         // for (int i = startInclusive; i < endInclusive ; i++) { ... }
         IntStream.range(0, 10).forEach(i -> items.put("item" + i, new Item("item" + i)));
     }
