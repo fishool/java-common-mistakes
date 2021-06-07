@@ -83,6 +83,7 @@ public class DeadLockController {
                     List<Item> cart = createCart().stream()
                             .sorted(Comparator.comparing(Item::getName))
                             .collect(Collectors.toList());
+                    // 对加锁对象 按特定字段排序 , 使其不同线程加锁顺序一致 . 避免死锁
                     return createOrder(cart);
                 })
                 .filter(result -> result)
