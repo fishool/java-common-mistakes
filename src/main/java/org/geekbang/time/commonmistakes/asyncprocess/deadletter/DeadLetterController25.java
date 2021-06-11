@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @RequestMapping("deadletter")
 @Slf4j
 @RestController
-public class DeadLetterController {
+public class DeadLetterController25 {
 
     AtomicLong atomicLong = new AtomicLong();
     @Autowired

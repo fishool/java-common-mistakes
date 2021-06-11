@@ -32,21 +32,27 @@ public class RabbitConfiguration {
 
     @Bean
     public Declarables declarablesForDead() {
+        // 死信队列 绑定死信交换机
         Queue queue = new Queue(Consts.DEAD_QUEUE);
         DirectExchange directExchange = new DirectExchange(Consts.DEAD_EXCHANGE);
         return new Declarables(queue, directExchange,
                 BindingBuilder.bind(queue).to(directExchange).with(Consts.DEAD_ROUTING_KEY));
     }
 
+    // 定义重试操作拦截器
     @Bean
     public RetryOperationsInterceptor interceptor() {
         return RetryInterceptorBuilder.stateless()
+                // 最大尝试次数
                 .maxAttempts(5)
+                // 指数退避重试
                 .backOffOptions(1000, 2.0, 10000)
+                // 重试4次后 , 推送消息到死信队列
                 .recoverer(new RepublishMessageRecoverer(rabbitTemplate, Consts.DEAD_EXCHANGE, Consts.DEAD_ROUTING_KEY))
                 .build();
     }
 
+    // 增加消费线程
     @Bean
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
