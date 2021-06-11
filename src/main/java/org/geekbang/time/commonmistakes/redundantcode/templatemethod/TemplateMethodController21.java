@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("templatemethod")
-public class TemplateMethodController {
+public class TemplateMethodController21 {
 
     private static Map<Long, Integer> items = new HashMap<>();
 
