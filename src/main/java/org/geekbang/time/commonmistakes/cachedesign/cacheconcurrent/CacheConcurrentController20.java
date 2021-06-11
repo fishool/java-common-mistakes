@@ -65,7 +65,7 @@ public class CacheConcurrentController20 {
             RLock locker = redissonClient.getLock("locker");
             // 获取锁失败
             while (!locker.tryLock()) {
-                Thread.sleep(300);
+                Thread.sleep(100);
             }
             try {
                 data = stringRedisTemplate.opsForValue().get("hotsopt");
