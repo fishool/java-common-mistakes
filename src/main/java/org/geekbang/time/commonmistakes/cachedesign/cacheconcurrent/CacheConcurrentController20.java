@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 @RequestMapping("cacheconcurrent")
 @RestController
-public class CacheConcurrentController {
+public class CacheConcurrentController20 {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -45,21 +45,37 @@ public class CacheConcurrentController {
         return data;
     }
 
+    /**
+     * 缓存击穿:
+     *    缓存失效的瞬间, 请求并发打打数据库
+     *    通过回源双端检测加分布式锁解决
+     * 缓存穿透:
+     *    缓存没有启动压力缓冲的作用
+     *    1. 空值缓存  2. 布隆过滤器
+     *
+     *
+     * 缓存更新:
+     * 先更新数据库, 再删除缓存
+     **/
     @GetMapping("right")
-    public String right() {
+    public String right() throws InterruptedException {
+        // 通过分布式锁 , 限制回源并发 , 防止失效时, 缓存击穿
         String data = stringRedisTemplate.opsForValue().get("hotsopt");
         if (StringUtils.isEmpty(data)) {
             RLock locker = redissonClient.getLock("locker");
-            if (locker.tryLock()) {
-                try {
-                    data = stringRedisTemplate.opsForValue().get("hotsopt");
-                    if (StringUtils.isEmpty(data)) {
-                        data = getExpensiveData();
-                        stringRedisTemplate.opsForValue().set("hotsopt", data, 5, TimeUnit.SECONDS);
-                    }
-                } finally {
-                    locker.unlock();
+            // 获取锁失败
+            while (!locker.tryLock()) {
+                Thread.sleep(300);
+            }
+            try {
+                data = stringRedisTemplate.opsForValue().get("hotsopt");
+                if (StringUtils.isEmpty(data)) {
+                    data = getExpensiveData();
+                    stringRedisTemplate.opsForValue().set("hotsopt", data, 5, TimeUnit.SECONDS);
                 }
+                return  data;
+            } finally {
+                locker.unlock();
             }
         }
         return data;

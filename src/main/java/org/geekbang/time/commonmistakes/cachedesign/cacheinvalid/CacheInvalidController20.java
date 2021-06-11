@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 @Slf4j
 @RequestMapping("cacheinvalid")
 @RestController
-public class CacheInvalidController {
+public class CacheInvalidController20 {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -27,7 +27,8 @@ public class CacheInvalidController {
 
     //@PostConstruct
     public void wrongInit() {
-        IntStream.rangeClosed(1, 1000).forEach(i -> stringRedisTemplate.opsForValue().set("city" + i, getCityFromDb(i), 30, TimeUnit.SECONDS));
+        IntStream.rangeClosed(1, 1000).forEach(i -> stringRedisTemplate.opsForValue()
+                .set("city" + i, getCityFromDb(i), 30, TimeUnit.SECONDS));
         log.info("Cache init finished");
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             log.info("DB QPS : {}", atomicInteger.getAndSet(0));
@@ -36,7 +37,10 @@ public class CacheInvalidController {
 
     //@PostConstruct
     public void rightInit1() {
-        IntStream.rangeClosed(1, 1000).forEach(i -> stringRedisTemplate.opsForValue().set("city" + i, getCityFromDb(i), 30 + ThreadLocalRandom.current().nextInt(10), TimeUnit.SECONDS));
+        IntStream.rangeClosed(1, 1000).forEach(i -> stringRedisTemplate.opsForValue()
+                // 缓存时间 使用范围随机时间, 防止缓存雪崩
+                .set("city" + i, getCityFromDb(i), 30 + ThreadLocalRandom.current().nextInt(10),
+                        TimeUnit.SECONDS));
         log.info("Cache init finished");
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             log.info("DB QPS : {}", atomicInteger.getAndSet(0));
